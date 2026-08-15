@@ -8,10 +8,8 @@ A Vercel-hosted media extraction API powered by yt-dlp.
 - TikTok
 - Instagram
 - Facebook
-- X/Twitter / haven't checked 
-- Reddit / haven't checked
-- Vimeo / haven't checked
-- Twitch / haven't checked
+- X/Twitter
+- Twitch
 - Pinterest video 
 - Other yt-dlp supported sites
 
