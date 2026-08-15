@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta
+  name="viewport"
+  content="width=device-width,initial-scale=1"
+>
+
+<title>Social Downloader API</title>
+
+<style>
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  font-family:
+    Arial,
+    sans-serif;
+
+  background:
+    #080808;
+
+  color: white;
+}
+
+.container {
+
+  width: min(
+    600px,
+    92%
+  );
+
+  padding: 30px;
+
+  border-radius: 20px;
+
+  background:
+    #111;
+
+  box-shadow:
+    0 0 40px
+    rgba(
+      0,
+      255,
+      255,
+      .12
+    );
+}
+
+h1 {
+
+  text-align: center;
+
+  margin-top: 0;
+
+}
+
+.subtitle {
+
+  text-align: center;
+
+  color: #aaa;
+
+  margin-bottom: 25px;
+
+}
+
+.input {
+
+  width: 100%;
+
+  padding: 15px;
+
+  border-radius: 10px;
+
+  border: 1px solid #333;
+
+  outline: none;
+
+  background: #080808;
+
+  color: white;
+
+  font-size: 16px;
+
+}
+
+button {
+
+  width: 100%;
+
+  margin-top: 12px;
+
+  padding: 15px;
+
+  border: none;
+
+  border-radius: 10px;
+
+  background: #00e5ff;
+
+  color: #000;
+
+  font-weight: bold;
+
+  cursor: pointer;
+
+}
+
+button:hover {
+
+  opacity: .85;
+
+}
+
+#result {
+
+  margin-top: 25px;
+
+}
+
+.card {
+
+  padding: 15px;
+
+  border-radius: 12px;
+
+  background: #191919;
+
+}
+
+.thumbnail {
+
+  width: 100%;
+
+  border-radius: 10px;
+
+  margin-bottom: 15px;
+
+}
+
+.download {
+
+  display: block;
+
+  text-align: center;
+
+  padding: 13px;
+
+  margin-top: 15px;
+
+  border-radius: 10px;
+
+  background: #00e5ff;
+
+  color: #000;
+
+  text-decoration: none;
+
+  font-weight: bold;
+
+}
+
+.error {
+
+  color: #ff5555;
+
+}
+
+pre {
+
+  overflow-x: auto;
+
+  white-space: pre-wrap;
+
+  word-break: break-word;
+
+  color: #aaa;
+
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="container">
+
+<h1>⚡ Social Downloader</h1>
+
+<div class="subtitle">
+YouTube • TikTok • Instagram • Facebook • X
+</div>
+
+<input
+  id="url"
+  class="input"
+  placeholder="Paste video URL..."
+>
+
+<button onclick="download()">
+Get Media
+</button>
+
+<div id="result"></div>
+
+</div>
+
+<script>
+
+async function download() {
+
+  const input =
+    document.getElementById(
+      "url"
+    );
+
+  const result =
+    document.getElementById(
+      "result"
+    );
+
+  const url =
+    input.value.trim();
+
+  if (!url) {
+
+    result.innerHTML =
+      '<p class="error">Paste a URL first.</p>';
+
+    return;
+
+  }
+
+  result.innerHTML =
+    "<p>⏳ Extracting media...</p>";
+
+  try {
+
+    const api =
+      "/api/download?url=" +
+      encodeURIComponent(url);
+
+    const response =
+      await fetch(api);
+
+    const data =
+      await response.json();
+
+    if (!data.success) {
+
+      throw new Error(
+        data.error ||
+        "Extraction failed"
+      );
+
+    }
+
+    let html = "";
+
+    html += `
+      <div class="card">
+
+        ${
+          data.thumbnail
+          ?
+          `<img
+            class="thumbnail"
+            src="${escapeHtml(
+              data.thumbnail
+            )}"
+          >`
+          :
+          ""
+        }
+
+        <h2>
+          ${escapeHtml(
+            data.title ||
+            "Untitled"
+          )}
+        </h2>
+
+        <p>
+          Platform:
+          ${escapeHtml(
+            data.platform ||
+            "Unknown"
+          )}
+        </p>
+
+        ${
+          data.best &&
+          data.best.download_url
+          ?
+          `<a
+            class="download"
+            href="${escapeHtml(
+              data.best.download_url
+            )}"
+            target="_blank"
+            rel="noopener"
+          >
+            ⬇️ Download Best Quality
+          </a>`
+          :
+          ""
+        }
+
+        <details>
+
+          <summary>
+            Available formats
+          </summary>
+
+          <pre>${escapeHtml(
+            JSON.stringify(
+              data.formats,
+              null,
+              2
+            )
+          )}</pre>
+
+        </details>
+
+      </div>
+    `;
+
+    result.innerHTML = html;
+
+  } catch (error) {
+
+    result.innerHTML =
+      `<p class="error">
+        ❌ ${escapeHtml(
+          error.message
+        )}
+      </p>`;
+
+  }
+
+}
+
+
+function escapeHtml(value) {
+
+  return String(value)
+
+    .replaceAll(
+      "&",
+      "&amp;"
+    )
+
+    .replaceAll(
+      "<",
+      "&lt;"
+    )
+
+    .replaceAll(
+      ">",
+      "&gt;"
+    )
+
+    .replaceAll(
+      '"',
+      "&quot;"
+    )
+
+    .replaceAll(
+      "'",
+      "&#039;"
+    );
+
+}
+
+</script>
+
+</body>
+
+</html>
