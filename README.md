@@ -21,7 +21,7 @@ GET:
 
 Example:
 
-/api/download?url=https://www.youtube.com/watch?v=VIDEO_ID
+https://social-chi-amber.vercel.app/api/download?url=https://www.instagram.com/reel/DbpQKueyONq/?igsh=MTB4Nm9xcjZxbnVzcw==&igsi=MTB4Nm9xcjZxbnVzcw==
 
 ## Response
 
