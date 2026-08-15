@@ -4,14 +4,15 @@ A Vercel-hosted media extraction API powered by yt-dlp.
 
 ## Features
 
-- YouTube
+- YouTube / not working 
 - TikTok
 - Instagram
 - Facebook
-- X/Twitter
-- Reddit
-- Vimeo
-- Twitch
+- X/Twitter / haven't checked 
+- Reddit / haven't checked
+- Vimeo / haven't checked
+- Twitch / haven't checked
+- Pinterest video 
 - Other yt-dlp supported sites
 
 ## API
