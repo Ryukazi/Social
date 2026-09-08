@@ -99,14 +99,6 @@ def extract(url):
         "no_warnings": True,
         "skip_download": True,
         "noplaylist": True,
-        "extractor_args": {
-            "youtube": {
-                # 'tv' and 'web_safari' clients currently avoid
-                # YouTube's "Sign in to confirm you're not a bot" check
-                # most reliably without needing cookies.
-                "player_client": ["tv", "web_safari"]
-            }
-        },
     }
 
     with yt_dlp.YoutubeDL(options) as ydl:
